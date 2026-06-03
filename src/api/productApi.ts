@@ -45,28 +45,19 @@ export const getProducts = async (
   return products;
 };
 
-// export const getCategories = async (): Promise<Category[]> => {
-//   const response = await axios.get<Category[]>(
-//     `${BASE_URL}/categories`
-//   );
+export const getCategories = async (): Promise<Category[]> => {
+  const response = await axios.get<Category[]>(
+    `${BASE_URL}/categories`
+  );
 
-//   return response.data;
-// };
-export const getCategories =
-  async () => {
-    const response =
-      await axios.get(
-        `${BASE_URL}/categories`
-      );
-
-    return response.data;
-  };
+  return response.data;
+};
 
 export const getProductById = async (
   id: string
-) => {
-  const response = await axios.get(
-    `https://api.escuelajs.co/api/v1/products/${id}`
+): Promise<Product> => {
+  const response = await axios.get<Product>(
+    `${BASE_URL}/products/${id}`
   );
 
   return response.data;
