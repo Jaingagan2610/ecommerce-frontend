@@ -18,12 +18,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         style={{
           border: "1px solid #ddd",
           borderRadius: "8px",
-          padding: "12px",
+          padding: "10px",
           cursor: "pointer",
         }}
       >
         <img
-          src={product.images?.[0]}
+          src={product.images[0]}
           alt={product.title}
           style={{
             width: "100%",

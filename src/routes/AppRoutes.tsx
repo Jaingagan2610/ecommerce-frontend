@@ -1,30 +1,17 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
 import ProductDetail from "../pages/ProductDetail";
+import Cart from "../pages/Cart";
 
-const AppRoutes = () => {
+function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
-
-        <Route
-          path="/product/:id/details"
-          element={
-            <ProductDetail />
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/product/:id/details" element={<ProductDetail />} />
+      <Route path="/cart" element={<Cart />} />
+    </Routes>
   );
-};
+}
 
 export default AppRoutes;

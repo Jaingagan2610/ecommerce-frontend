@@ -1,21 +1,32 @@
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-import { useProducts } from "../context/ProductContext";
 import { useCart } from "../context/CartContext";
+import { getProductById } from "../api/productApi";
+import type { Product } from "../interfaces/Product";
 
 const ProductDetail = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const { products } = useProducts();
-
   const cartStore = useCart();
 
-  const product = products.find(
-    (item) => item.id === Number(id)
-  );
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    getProductById(id)
+      .then((data) => setProduct(data))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
 
   if (!product) {
     return <h2>Product Not Found</h2>;

@@ -1,28 +1,44 @@
-import ProductCard from "./ProductCard";
 import type { Product } from "../interfaces/Product";
+import ProductCard from "./ProductCard";
 
-interface ProductGridProps {
+interface Props {
   products: Product[];
 }
 
 const ProductGrid = ({
   products,
-}: ProductGridProps) => {
+}: Props) => {
+
+  const isMobile =
+    window.innerWidth < 768;
+
+  const isTablet =
+    window.innerWidth >= 768 &&
+    window.innerWidth < 1024;
+
   return (
     <div
       style={{
         display: "grid",
+
         gridTemplateColumns:
-          "repeat(auto-fill,minmax(250px,1fr))",
+          isMobile
+            ? "1fr"
+            : isTablet
+              ? "repeat(2,1fr)"
+              : "repeat(4,1fr)",
+
         gap: "20px",
       }}
     >
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-        />
-      ))}
+      {products.map(
+        (product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        )
+      )}
     </div>
   );
 };

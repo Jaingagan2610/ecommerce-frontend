@@ -1,4 +1,4 @@
-import type { Category } from "../interfaces/Product";
+import type { Category } from "../interfaces/Category";
 
 interface Props {
   categories: Category[];
@@ -11,14 +11,22 @@ const CategoryFilter = ({
   selected,
   onChange,
 }: Props) => {
-  const handleChange = (id: string) => {
-    if (selected.includes(id)) {
-      onChange(
-        selected.filter((item) => item !== id)
-      );
-    } else {
-      onChange([...selected, id]);
-    }
+
+  const toggleCategory = (
+    categoryId: string
+  ) => {
+
+    const updatedCategories =
+      selected.includes(categoryId)
+        ? selected.filter(
+          (id) => id !== categoryId
+        )
+        : [
+          ...selected,
+          categoryId,
+        ];
+
+    onChange(updatedCategories);
   };
 
   return (
@@ -26,19 +34,28 @@ const CategoryFilter = ({
       <h3>Categories</h3>
 
       {categories.map((category) => (
-        <div key={category.id}>
+        <label
+          key={category.id}
+          style={{
+            display: "block",
+            marginBottom: "6px",
+          }}
+        >
           <input
             type="checkbox"
             checked={selected.includes(
-              category.id.toString()
+              String(category.id)
             )}
             onChange={() =>
-              handleChange(category.id.toString())
+              toggleCategory(
+                String(category.id)
+              )
             }
           />
 
+          {" "}
           {category.name}
-        </div>
+        </label>
       ))}
     </div>
   );

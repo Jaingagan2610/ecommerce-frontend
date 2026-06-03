@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 
 import { getProducts, getCategories } from "../api/productApi";
 
@@ -14,22 +13,37 @@ const Home = () => {
   const [products, setLocalProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [sort, setSort] = useState("");
+
   const { setProducts } = useProducts();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  // Read URL when page loads
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
 
-  const selectedCategories =
-    searchParams.get("categories")?.split(",").filter(Boolean) || [];
+    const categoryParam = params.get("categories");
+    const sortParam = params.get("sort");
 
-  const sort = searchParams.get("sort") || "";
+    if (categoryParam) {
+      setSelectedCategories(
+        categoryParam.split(",").filter(Boolean)
+      );
+    }
+
+    if (sortParam) {
+      setSort(sortParam);
+    }
+  }, []);
 
   useEffect(() => {
     loadCategories();
   }, []);
 
   useEffect(() => {
+    updateUrl();
     loadProducts();
-  }, [searchParams]);
+  }, [selectedCategories, sort]);
 
   const loadCategories = async () => {
     try {
@@ -49,50 +63,57 @@ const Home = () => {
 
       setLocalProducts(response);
 
-      // Save globally for Product Detail Page
       setProducts(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleCategoryChange = (ids: string[]) => {
-    const params = new URLSearchParams(searchParams);
+  const updateUrl = () => {
+    const params = new URLSearchParams();
 
-    if (ids.length) {
-      params.set("categories", ids.join(","));
-    } else {
-      params.delete("categories");
+    if (selectedCategories.length) {
+      params.set(
+        "categories",
+        selectedCategories.join(",")
+      );
     }
 
-    setSearchParams(params);
+    if (sort) {
+      params.set("sort", sort);
+    }
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+
+    window.history.replaceState(
+      {},
+      "",
+      newUrl
+    );
+  };
+
+  const handleCategoryChange = (ids: string[]) => {
+    setSelectedCategories(ids);
   };
 
   const handleSortChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (value) {
-      params.set("sort", value);
-    } else {
-      params.delete("sort");
-    }
-
-    setSearchParams(params);
+    setSort(value);
   };
 
   return (
-    <div
+    <main
       style={{
         padding: "20px",
       }}
     >
       <h1>Products</h1>
 
-      <div
+      <section
         style={{
           display: "flex",
           gap: "20px",
           marginBottom: "20px",
+          flexWrap: "wrap",
         }}
       >
         <CategoryFilter
@@ -101,14 +122,15 @@ const Home = () => {
           onChange={handleCategoryChange}
         />
 
+
         <SortDropdown
           value={sort}
           onChange={handleSortChange}
         />
-      </div>
+      </section>
 
       <ProductGrid products={products} />
-    </div>
+    </main>
   );
 };
 

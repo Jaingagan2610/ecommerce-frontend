@@ -1,6 +1,8 @@
 interface Props {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (
+    value: string
+  ) => void;
 }
 
 const SortDropdown = ({
@@ -11,21 +13,21 @@ const SortDropdown = ({
     <select
       value={value}
       onChange={(e) =>
-        onChange(e.target.value)
+        onChange(
+          e.target.value
+        )
       }
     >
-      <option value="">Default</option>
+      <option value="">
+        Sort
+      </option>
 
       <option value="priceAsc">
-        Price Low → High
+        Price Low To High
       </option>
 
       <option value="priceDesc">
-        Price High → Low
-      </option>
-
-      <option value="nameAsc">
-        Name A → Z
+        Price High To Low
       </option>
     </select>
   );

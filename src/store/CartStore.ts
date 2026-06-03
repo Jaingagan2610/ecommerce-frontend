@@ -8,21 +8,17 @@ class CartStore {
     constructor() {
         makeAutoObservable(this);
 
-        const savedCart =
-            localStorage.getItem("cart");
+        const savedCart = localStorage.getItem("cart");
 
         if (savedCart) {
-            this.cartItems =
-                JSON.parse(savedCart);
+            this.cartItems = JSON.parse(savedCart);
         }
     }
 
-    addToCart(product: Product) {
-        const existingItem =
-            this.cartItems.find(
-                (item) =>
-                    item.id === product.id
-            );
+    addToCart = (product: Product) => {
+        const existingItem = this.cartItems.find(
+            (item) => item.id === product.id
+        );
 
         if (existingItem) {
             existingItem.quantity += 1;
@@ -36,19 +32,34 @@ class CartStore {
         this.saveCart();
     }
 
+    removeFromCart = (productId: number) => {
+        const existingItem = this.cartItems.find(
+            (item) => item.id === productId
+        );
+
+        if (!existingItem) return;
+
+        if (existingItem.quantity > 1) {
+            existingItem.quantity -= 1;
+        } else {
+            this.cartItems = this.cartItems.filter(
+                (item) => item.id !== productId
+            );
+        }
+
+        this.saveCart();
+    };
+
     saveCart() {
         localStorage.setItem(
             "cart",
-            JSON.stringify(
-                this.cartItems
-            )
+            JSON.stringify(this.cartItems)
         );
     }
 
     get totalItems() {
         return this.cartItems.reduce(
-            (acc, item) =>
-                acc + item.quantity,
+            (acc, item) => acc + item.quantity,
             0
         );
     }
@@ -56,15 +67,13 @@ class CartStore {
     get totalPrice() {
         return this.cartItems.reduce(
             (acc, item) =>
-                acc +
-                item.price *
-                item.quantity,
+                acc + item.price * item.quantity,
             0
         );
     }
 }
 
-const cartStore =
-    new CartStore();
+
+const cartStore = new CartStore();
 
 export default cartStore;
