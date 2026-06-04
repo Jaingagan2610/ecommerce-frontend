@@ -229,6 +229,7 @@ const ProductDetail = () => {
               }}
             >
               <button
+                data-testid="quantity-decrement"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 style={{
                   width: "36px",
@@ -244,10 +245,14 @@ const ProductDetail = () => {
               >
                 <FiMinus size={16} />
               </button>
-              <span style={{ width: "40px", textAlign: "center", fontWeight: 700, fontSize: "1rem" }}>
+              <span
+                data-testid="quantity-value"
+                style={{ width: "40px", textAlign: "center", fontWeight: 700, fontSize: "1rem" }}
+              >
                 {quantity}
               </span>
               <button
+                data-testid="quantity-increment"
                 onClick={() => setQuantity(quantity + 1)}
                 style={{
                   width: "36px",
@@ -266,6 +271,7 @@ const ProductDetail = () => {
             </div>
 
             <button
+              data-testid="add-to-cart-btn"
               onClick={handleAddToCart}
               className="btn-primary"
               style={{
