@@ -34,7 +34,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    // Add multiple quantities by loop or we can just call it quantity times
+    // Loop to add selected quantity of items
     for (let i = 0; i < quantity; i++) {
       cartStore.addToCart(product);
     }

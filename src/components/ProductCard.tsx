@@ -31,7 +31,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Link
-      to={`/product/${product.id}/details`}
+      to={`/product/${product.id}`}
       style={{
         textDecoration: "none",
         color: "inherit",
